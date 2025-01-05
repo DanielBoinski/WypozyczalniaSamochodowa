@@ -1,0 +1,73 @@
+﻿@model IEnumerable<WypozyczalniaSamochodowa.Models.Auto>
+
+@{
+    ViewData["Title"] = "Zarządzanie flotą";
+}
+
+<div style="background-color: #004a80; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0px 5px 15px rgba(0,0,0,0.2);">
+    <div class="container">
+        <h1 style="margin: 0; text-align: center; font-size: 28px; text-transform: uppercase;">Zarządzanie flotą</h1>
+        <p class="text-center" style="font-size: 1.1em;">Przeglądaj, edytuj i zarządzaj pojazdami dostępnymi w ofercie naszej wypożyczalni.</p>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="text-end mb-3">
+        <a asp-action="Create" class="btn btn-success" style="font-weight: bold; box-shadow: 0px 4px 6px rgba(0,0,0,0.1);">
+            <i class="fas fa-plus"></i> Dodaj Nowe Auto
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center">
+            Brak dostępnych pojazdów w bazie danych.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card" style="border: 1px solid #e9ecef; border-radius: 10px; box-shadow: 0px 4px 6px rgba(0,0,0,0.1); overflow: hidden; height: 100%;">
+                        
+                        <div style="background-color: #f8f9fa; text-align: center; padding: 10px;">
+                            @if (!string.IsNullOrEmpty(item.Zdjecie))
+                            {
+                                <img src="@item.Zdjecie" alt="Zdjęcie auta" class="img-fluid" style="max-height: 200px; object-fit: contain; margin: 0 auto;">
+                            }
+                            else
+                            {
+                                <div class="text-center d-flex align-items-center justify-content-center" style="height: 200px; background-color: #e9ecef; color: #555;">
+                                    Brak zdjęcia
+                                </div>
+                            }
+                        </div>
+                        
+                        <div class="card-body" style="padding: 20px; background-color: white;">
+                            <h4 class="card-title" style="color: #004a80; text-align: center;">@item.Marka @item.Model</h4>
+                            <p style="color: #555; text-align: center;"><strong>Silnik:</strong> @item.Silnik</p>
+                            <p style="color: #555; text-align: center;"><strong>Rok Produkcji:</strong> @item.RokProdukcji</p>
+                            <p style="color: #555; text-align: center;"><strong>Opis:</strong> @item.Opis</p>
+                            <p style="color: #555; text-align: center;"><strong>Cena:</strong> @item.Cena zł / dzień</p>
+                            
+                            <div class="d-flex justify-content-around mt-3">
+                                <a asp-action="Edit" asp-route-id="@item.AutoId" class="btn btn-warning btn-sm" style="color: #004a80; font-weight: bold;">
+                                    Edytuj
+                                </a>
+                               
+                                <a asp-action="Delete" asp-route-id="@item.AutoId" class="btn btn-danger btn-sm" style="font-weight: bold;">
+                                    Usuń
+                                </a>
+                                <a asp-action="Block" asp-route-id="@item.AutoId" class="btn btn-dark btn-sm" style="font-weight: bold;">
+                                    Blokuj
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

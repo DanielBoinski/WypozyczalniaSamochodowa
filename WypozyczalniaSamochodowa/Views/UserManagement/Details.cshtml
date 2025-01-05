@@ -1,0 +1,20 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityUser
+
+<h1>Szczegóły użytkownika</h1>
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <td>@Model.Id</td>
+    </tr>
+    <tr>
+        <th>Username</th>
+        <td>@Model.UserName</td>
+        <td>@Model.PhoneNumber</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>@Model.Email</td>
+        <td>@Model.PhoneNumber</td>
+    </tr>
+</table>
+<a asp-action="Index" class="btn btn-secondary">Powrót</a>

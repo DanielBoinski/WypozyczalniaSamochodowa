@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Blokowanie Auta";
+}
+
+<div style="background-color: #004a80; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0px 5px 15px rgba(0,0,0,0.2);">
+    <div class="container">
+        <h1 style="margin: 0; text-align: center; font-size: 28px;">Blokowanie Auta</h1>
+        <p class="text-center" style="font-size: 1.1em;">Zablokuj auto w wybranym okresie czasu.</p>
+    </div>
+</div>
+
+<div class="container" style="background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1);">
+    <div class="alert alert-info text-center" style="font-size: 1.2em; margin-bottom: 20px;">
+        <strong>Auto:</strong> @ViewBag.Marka @ViewBag.Model
+    </div>
+
+    <form asp-action="Block" method="post">
+        <input type="hidden" name="autoId" value="@ViewBag.AutoId" />
+
+        
+        <div class="form-group mb-3">
+            <label for="dataRozpoczecia" class="form-label">Data rozpoczęcia</label>
+            <input type="date" id="dataRozpoczecia" name="dataRozpoczecia" class="form-control" required />
+        </div>
+
+       
+        <div class="form-group mb-3">
+            <label for="dataZakonczenia" class="form-label">Data zakończenia</label>
+            <input type="date" id="dataZakonczenia" name="dataZakonczenia" class="form-control" required />
+        </div>
+
+       
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-danger btn-lg" style="width: 100%; font-weight: bold;">Zablokuj</button>
+            <a asp-action="Index" class="btn btn-secondary mt-3" style="padding: 10px 20px;">Anuluj</a>
+        </div>
+    </form>
+</div>

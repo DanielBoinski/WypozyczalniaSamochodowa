@@ -1,0 +1,85 @@
+﻿@model WypozyczalniaSamochodowa.Models.Auto
+
+@{
+    ViewData["Title"] = "Dodaj Nowe Auto";
+}
+
+<div style="background-color: #004a80; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0px 5px 15px rgba(0,0,0,0.2);">
+    <div class="container">
+        <h1 style="margin: 0; text-align: center; font-size: 28px;">Dodaj Nowe Auto</h1>
+        <p class="text-center" style="font-size: 1.1em;">Uzupełnij poniższe pola, aby dodać nowe auto do floty.</p>
+    </div>
+</div>
+
+<div class="container" style="background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1);">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+              
+                <div class="form-group mb-3">
+                    <label asp-for="Marka" class="form-label">Marka</label>
+                    <input asp-for="Marka" class="form-control" />
+                    <span asp-validation-for="Marka" class="text-danger"></span>
+                </div>
+
+               
+                <div class="form-group mb-3">
+                    <label asp-for="Model" class="form-label">Model</label>
+                    <input asp-for="Model" class="form-control" />
+                    <span asp-validation-for="Model" class="text-danger"></span>
+                </div>
+
+                
+                <div class="form-group mb-3">
+                    <label asp-for="Silnik" class="form-label">Silnik</label>
+                    <input asp-for="Silnik" class="form-control" />
+                    <span asp-validation-for="Silnik" class="text-danger"></span>
+                </div>
+
+               
+                <div class="form-group mb-3">
+                    <label asp-for="RokProdukcji" class="form-label">Rok Produkcji</label>
+                    <input asp-for="RokProdukcji" class="form-control" />
+                    <span asp-validation-for="RokProdukcji" class="text-danger"></span>
+                </div>
+
+               
+                <div class="form-group mb-3">
+                    <label asp-for="Opis" class="form-label">Opis</label>
+                    <textarea asp-for="Opis" class="form-control"></textarea>
+                    <span asp-validation-for="Opis" class="text-danger"></span>
+                </div>
+
+                
+                <div class="form-group mb-3">
+                    <label asp-for="Cena" class="form-label">Cena</label>
+                    <input asp-for="Cena" class="form-control" />
+                    <span asp-validation-for="Cena" class="text-danger"></span>
+                </div>
+
+                
+                <div class="form-group mb-3">
+                    <label for="Zdjecie" class="form-label">Dodaj Zdjęcie</label>
+                    <input type="file" name="Zdjecie" class="form-control" />
+                </div>
+
+                
+                <div class="form-group text-center">
+                    <input type="submit" value="Dodaj Auto" class="btn btn-success btn-lg w-100" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a asp-action="Index" class="btn btn-secondary" style="padding: 10px 20px;">Powrót do Listy</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

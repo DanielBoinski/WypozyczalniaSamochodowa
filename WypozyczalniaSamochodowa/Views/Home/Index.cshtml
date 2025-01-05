@@ -1,0 +1,92 @@
+﻿@{
+    ViewData["Title"] = "Strona Główna";
+}
+
+<div class="jumbotron text-center" style="background-color: #004a80; color: white; padding: 50px; border-radius: 10px; margin-top: 20px; box-shadow: 0px 5px 15px rgba(0,0,0,0.2);">
+    <h1 class="display-4">Witamy w Wypożyczalni Samochodowej</h1>
+    <p class="lead" style="font-size: 1.2em;">Twoje ulubione miejsce na wynajem samochodów w najlepszych cenach!</p>
+    <hr class="my-4" style="border-color: #ffcc00;">
+    <p>
+        Wynajem samochodów nigdy nie był tak prosty! Oferujemy szeroki wybór pojazdów na każdą okazję i w różnych przedziałach cenowych.
+    </p>
+    
+    <div style="margin-top: 20px;">
+        <a class="btn btn-warning btn-lg" asp-controller="Oferta" asp-action="Index" role="button" style="margin-right: 10px; box-shadow: 0px 4px 6px rgba(0,0,0,0.2); color: #004a80;">Zobacz Ofertę</a>
+    </div>
+</div>
+
+
+<div id="oferta" class="container mt-5" style="border-top: 2px solid #ffcc00; padding-top: 30px;">
+    <h2 class="text-center mb-4" style="color: #004a80; text-transform: uppercase;">Nasza Oferta</h2>
+    <p class="text-center" style="font-style: italic; color: #555;">
+        Oferujemy samochody dostosowane do różnych potrzeb – od luksusowych aut na specjalne okazje, po rodzinne SUV-y i ekologiczne pojazdy elektryczne.
+    </p>
+    <div class="row mt-4">
+        <div class="col-md-4 text-center">
+            <img src="/images/luxury-car.jpg" alt="Luksusowe Auto" class="img-fluid rounded shadow" style="max-height: 250px; object-fit: cover;">
+            <h3 class="mt-3" style="color: #004a80;">Luksusowe Auta</h3>
+            <p style="font-size: 0.9em; color: #555;">Wynajmij samochody klasy premium, idealne na specjalne okazje lub biznesowe wyjazdy.</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <img src="/images/suv.jpg" alt="SUV" class="img-fluid rounded shadow" style="max-height: 250px; object-fit: cover;">
+            <h3 class="mt-3" style="color: #004a80;">Rodzinne SUV-y</h3>
+            <p style="font-size: 0.9em; color: #555;">Przestronne, bezpieczne i wygodne SUV-y, które pomieszczą całą Twoją rodzinę i więcej.</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <img src="/images/electric-car.jpg" alt="Samochód Elektryczny" class="img-fluid rounded shadow" style="max-height: 250px; object-fit: cover;">
+            <h3 class="mt-3" style="color: #004a80;">Samochody Elektryczne</h3>
+            <p style="font-size: 0.9em; color: #555;">Wybierz ekologiczne i ekonomiczne rozwiązania z naszymi nowoczesnymi pojazdami elektrycznymi.</p>
+        </div>
+    </div>
+</div>
+
+
+<div id="polityka" class="container mt-5" style="border-top: 2px solid #ffcc00; padding-top: 30px;">
+    <h2 class="text-center mb-4" style="color: #004a80; text-transform: uppercase;">Polityka Wynajmu</h2>
+    <p style="font-size: 1.1em; line-height: 1.8; color: #555;">
+        Aby zapewnić najwyższą jakość usług, prosimy naszych klientów o przestrzeganie poniższych zasad:
+    </p>
+    <ul style="list-style-type: none; padding-left: 0;">
+        <li style="padding: 10px 0; border-bottom: 1px solid #e9ecef;">
+            <strong>Minimalny wiek wynajmującego:</strong> 21 lat.
+        </li>
+        <li style="padding: 10px 0; border-bottom: 1px solid #e9ecef;">
+            <strong>Prawo jazdy:</strong> Wynajmujący musi posiadać ważne prawo jazdy od co najmniej 2 lat.
+        </li>
+        <li style="padding: 10px 0; border-bottom: 1px solid #e9ecef;">
+            <strong>Godziny wynajmu:</strong> Każda doba wynajmu rozpoczyna się o godzinie 11:00 i kończy o godzinie 10:00 następnego dnia.
+        </li>
+        <li style="padding: 10px 0; border-bottom: 1px solid #e9ecef;">
+            <strong>Stan samochodu:</strong> Samochód należy zwrócić w takim stanie, w jakim został wynajęty.
+        </li>
+        <li style="padding: 10px 0; border-bottom: 1px solid #e9ecef;">
+            <strong>Palenie:</strong> Palenie tytoniu w samochodzie jest zabronione.
+        </li>
+        <li style="padding: 10px 0;">
+            <strong>Zwierzęta:</strong> Zwierzęta muszą być przewożone w odpowiednich transporterach.
+        </li>
+    </ul>
+</div>
+
+
+<div class="container mt-5" style="border-top: 2px solid #ffcc00; padding-top: 30px;">
+    <h2 class="text-center mb-4" style="color: #004a80; text-transform: uppercase;">Dlaczego Warto Wybrać Nas?</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h4 style="color: #004a80;">Najlepsze Ceny</h4>
+            <p style="font-size: 0.95em; color: #555;">Oferujemy konkurencyjne ceny na wynajem samochodów, niezależnie od klasy pojazdu. Nie znajdziesz lepszych ofert!</p>
+        </div>
+        <div class="col-md-6">
+            <h4 style="color: #004a80;">Elastyczność Wynajmu</h4>
+            <p style="font-size: 0.95em; color: #555;">Dostosowujemy się do Twoich potrzeb – wynajmij auto na kilka godzin, dni, a nawet miesięcy. Ty decydujesz!</p>
+        </div>
+        <div class="col-md-6">
+            <h4 style="color: #004a80;">Najwyższa Jakość</h4>
+            <p style="font-size: 0.95em; color: #555;">Nasza flota składa się z najnowszych modeli samochodów, które są regularnie serwisowane i gotowe do drogi.</p>
+        </div>
+        <div class="col-md-6">
+            <h4 style="color: #004a80;">Obsługa Klienta</h4>
+            <p style="font-size: 0.95em; color: #555;">Nasz zespół jest gotowy, aby odpowiedzieć na Twoje pytania i pomóc Ci wybrać idealny pojazd na każdą okazję.</p>
+        </div>
+    </div>
+</div>

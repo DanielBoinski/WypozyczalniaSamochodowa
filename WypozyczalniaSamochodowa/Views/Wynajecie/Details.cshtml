@@ -1,0 +1,82 @@
+﻿@model WypozyczalniaSamochodowa.Models.Wynajecie
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+@{
+    ViewData["Title"] = "Szczegóły Wynajęcia";
+}
+
+<div style="background-color: #004a80; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0px 5px 15px rgba(0,0,0,0.2);">
+    <div class="container">
+        <h1 style="margin: 0; text-align: center; font-size: 28px;">Szczegóły Wynajęcia</h1>
+        <p class="text-center" style="font-size: 1.1em;">Zobacz szczegóły wybranego wynajęcia.</p>
+    </div>
+</div>
+
+<div class="container mt-4" style="background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1);">
+    <dl class="row">
+        <dt class="col-sm-3" style="font-weight: bold; color: #004a80;">Data rozpoczęcia</dt>
+        <dd class="col-sm-9">@Model.DataRozpoczecia.ToString("dd.MM.yyyy")</dd>
+
+        <dt class="col-sm-3" style="font-weight: bold; color: #004a80;">Data zakończenia</dt>
+        <dd class="col-sm-9">@Model.DataZakonczenia.ToString("dd.MM.yyyy")</dd>
+
+        <dt class="col-sm-3" style="font-weight: bold; color: #004a80;">Cena całkowita</dt>
+        <dd class="col-sm-9">@Model.CenaCalkowita zł</dd>
+
+        <dt class="col-sm-3" style="font-weight: bold; color: #004a80;">Użytkownik</dt>
+        <dd class="col-sm-9">@Model.User?.UserName</dd>
+
+        <dt class="col-sm-3" style="font-weight: bold; color: #004a80;">Samochód</dt>
+        <dd class="col-sm-9">@Model.Auto?.Marka @Model.Auto?.Model</dd>
+
+        <dt class="col-sm-3" style="font-weight: bold; color: #004a80;">Adres dostarczenia</dt>
+        <dd class="col-sm-9">
+            @if (!string.IsNullOrWhiteSpace(Model.Address))
+            {
+                @Model.Address
+            }
+            else
+            {
+                <span class="text-muted">Adres nie podany</span>
+            }
+        </dd>
+
+        <dt class="col-sm-3" style="font-weight: bold; color: #004a80;">Lokalizacja na mapie</dt>
+        <dd class="col-sm-9">
+            @if (Model.Latitude != 0 && Model.Longitude != 0)
+            {
+                <div id="map" style="height: 400px; border: 1px solid #ccc; border-radius: 10px;"></div>
+            }
+            else
+            {
+                <span class="text-muted">Lokalizacja nie podana</span>
+            }
+        </dd>
+    </dl>
+</div>
+
+<div class="text-center mt-4">
+    <a asp-action="Edit" asp-route-id="@Model?.WynajecieId" class="btn btn-warning" style="color: white; font-weight: bold;">Edytuj</a>
+    <a asp-action="Index" class="btn btn-secondary">Powrót do listy</a>
+</div>
+
+@section Scripts {
+    @if (Model.Latitude != 0 && Model.Longitude != 0)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const map = L.map("map").setView([@Model.Latitude, @Model.Longitude], 13);
+
+                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                L.marker([@Model.Latitude, @Model.Longitude]).addTo(map)
+                    .bindPopup("Lokalizacja dostarczenia")
+                    .openPopup();
+            });
+        </script>
+    }
+}

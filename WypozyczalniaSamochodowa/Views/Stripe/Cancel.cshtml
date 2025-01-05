@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Anulowano";
+}
+
+<div style="background-color: #dc3545; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0px 5px 15px rgba(0,0,0,0.2);">
+    <div class="container">
+        <h1 style="margin: 0; text-align: center; font-size: 28px;">Anulowano</h1>
+        <p class="text-center" style="font-size: 1.1em;">Twoja płatność została anulowana.</p>
+    </div>
+</div>
+
+<div class="container text-center" style="background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1);">
+    <h2 style="color: #dc3545;">@ViewBag.Message</h2>
+    <p style="font-size: 1.2em; color: #555; margin-top: 15px;">Jeśli anulowałeś płatność przez przypadek, spróbuj ponownie lub skontaktuj się z nami, aby uzyskać pomoc.</p>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-lg btn-secondary" style="font-weight: bold; margin-top: 20px;">Powrót do strony głównej</a>
+</div>

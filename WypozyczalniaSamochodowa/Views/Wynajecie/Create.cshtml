@@ -1,0 +1,187 @@
+﻿@model WypozyczalniaSamochodowa.Models.Wynajecie
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+@{
+    ViewData["Title"] = "Utwórz Wynajęcie";
+}
+
+<div style="background-color: #004a80; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0px 5px 15px rgba(0,0,0,0.2);">
+    <div class="container">
+        <h1 style="margin: 0; text-align: center; font-size: 28px;">Utwórz Wynajęcie</h1>
+        <p class="text-center" style="font-size: 1.1em;">Zarezerwuj swoje wymarzone auto szybko i łatwo!</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <form asp-action="Create" method="post" style="background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1);">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+               
+                <div class="form-group mb-3" style="text-align: center;">
+                    <label class="form-label"></label>
+                    <p class="form-control-plaintext" style="font-weight: bold; font-size: 24px;">@ViewBag.AutoNazwa</p>
+                </div>
+
+
+                
+                <div class="form-group mb-3" style="display: none;">
+                    <label asp-for="AutoId" class="form-label">Wybierz auto</label>
+                    <select asp-for="AutoId" class="form-select" asp-items="ViewBag.AutoId"></select>
+                </div>
+
+                
+                <div class="form-group mb-3">
+                    <label asp-for="DataRozpoczecia" class="form-label">Data rozpoczęcia</label>
+                    <input asp-for="DataRozpoczecia" type="date" class="form-control" />
+                    <span asp-validation-for="DataRozpoczecia" class="text-danger"></span>
+                </div>
+
+                
+                <div class="form-group mb-3">
+                    <label asp-for="DataZakonczenia" class="form-label">Data zakończenia</label>
+                    <input asp-for="DataZakonczenia" type="date" class="form-control" />
+                    <span asp-validation-for="DataZakonczenia" class="text-danger"></span>
+                </div>
+
+               
+                <div class="form-group mb-3">
+                    <label asp-for="CenaCalkowita" class="form-label">Cena za dobę</label>
+                    <input asp-for="CenaCalkowita" class="form-control" value="@ViewBag.Cena" readonly />
+                    <span asp-validation-for="CenaCalkowita" class="text-danger"></span>
+                </div>
+
+                
+                <div class="form-group form-check mb-3">
+                    <input type="checkbox" id="delivery-checkbox" class="form-check-input" />
+                    <label for="delivery-checkbox" class="form-check-label">Czy dostarczyć auto na wybrany adres?</label>
+                </div>
+
+               
+                <div class="form-group delivery-options" style="display: none;">
+                    <label for="address" class="form-label">Adres dostarczenia</label>
+                    <input type="text" id="address" name="Address" class="form-control mb-2" placeholder="Wpisz adres, np. Warszawa, ul. Marszałkowska 1" />
+                    <button type="button" id="geocode-button" class="btn btn-outline-primary">Pokaż na mapie</button>
+                </div>
+
+                
+                <div class="form-group delivery-options mt-3" style="display: none;">
+                    <label for="map" class="form-label">Wybierz lokalizację podstawienia na mapie</label>
+                    <div id="map" style="height: 400px; border: 1px solid #ccc; border-radius: 10px;"></div>
+                    <input type="hidden" id="latitude" name="Latitude" />
+                    <input type="hidden" id="longitude" name="Longitude" />
+                </div>
+
+               
+                <div class="form-group mb-3">
+                    <label for="paymentMethod" class="form-label">Metoda płatności</label>
+                    <select id="paymentMethod" name="PaymentMethod" class="form-select">
+                        <option value="Cash">Gotówka na miejscu</option>
+                        <option value="Online">Płatność z góry</option>
+                    </select>
+                </div>
+
+                <div class="form-group text-center mt-4">
+                    <input type="submit" value="Utwórz" class="btn btn-success btn-lg" style="width: 100%; font-weight: bold;" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a asp-controller="Oferta" asp-action="Index" class="btn btn-secondary" style="padding: 10px 20px;">Powrót do listy</a>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const defaultLocation = [52.2296756, 21.0122287]; 
+            const deliveryCheckbox = document.getElementById("delivery-checkbox");
+            const mapSections = document.querySelectorAll(".delivery-options");
+            const mapContainer = document.getElementById("map");
+            let marker;
+
+            
+            const map = L.map(mapContainer).setView(defaultLocation, 13);
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors'
+            }).addTo(map);
+
+            
+            deliveryCheckbox.addEventListener("change", function () {
+                mapSections.forEach(section => {
+                    section.style.display = this.checked ? "block" : "none";
+                });
+
+                if (this.checked) {
+                    setTimeout(() => {
+                        map.invalidateSize();
+                    }, 100);
+                }
+            });
+
+            
+            map.on("click", function (e) {
+                const { lat, lng } = e.latlng;
+
+                if (!marker) {
+                    marker = L.marker([lat, lng]).addTo(map);
+                } else {
+                    marker.setLatLng([lat, lng]);
+                }
+
+                document.getElementById("latitude").value = lat;
+                document.getElementById("longitude").value = lng;
+
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("address").value = data.display_name || "Nieznany adres";
+                    })
+                    .catch(error => {
+                        console.error("Błąd podczas pobierania adresu:", error);
+                    });
+            });
+
+            
+            document.getElementById("geocode-button").addEventListener("click", function () {
+                const address = document.getElementById("address").value;
+
+                if (!address) {
+                    alert("Wpisz adres, aby wyświetlić go na mapie.");
+                    return;
+                }
+
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length === 0) {
+                            alert("Nie znaleziono lokalizacji dla podanego adresu.");
+                            return;
+                        }
+
+                        const { lat, lon } = data[0];
+                        map.setView([lat, lon], 13);
+                        if (!marker) {
+                            marker = L.marker([lat, lon]).addTo(map);
+                        } else {
+                            marker.setLatLng([lat, lon]);
+                        }
+
+                        document.getElementById("latitude").value = lat;
+                        document.getElementById("longitude").value = lon;
+                    })
+                    .catch(error => {
+                        console.error("Błąd podczas geokodowania:", error);
+                    });
+            });
+        });
+    </script>
+}

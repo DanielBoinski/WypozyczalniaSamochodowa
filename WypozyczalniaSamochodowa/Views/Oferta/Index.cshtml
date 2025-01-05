@@ -1,0 +1,93 @@
+﻿@model IEnumerable<WypozyczalniaSamochodowa.Models.Oferta>
+
+@{
+    ViewData["Title"] = "Nasza oferta";
+}
+
+<div style="background-color: #004a80; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0px 5px 15px rgba(0,0,0,0.2);">
+    <div class="container">
+        <h1 style="margin: 0; text-align: center; font-size: 28px; text-transform: uppercase;">Lista Ofert</h1>
+        <p class="text-center" style="font-size: 1.1em;">Znajdź idealny samochód dostosowany do Twoich potrzeb!</p>
+    </div>
+</div>
+
+
+<div class="container mt-4" style="background-color: #f8f9fa; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 6px rgba(0,0,0,0.1);">
+    <h2 class="text-center mb-4" style="color: #004a80;">Filtruj Oferty</h2>
+    <form asp-action="Index" method="get" class="row g-3">
+        <div class="col-md-2">
+            <label for="cenaOd" class="form-label" style="color: #555;">Cena od</label>
+            <input type="number" name="cenaOd" id="cenaOd" class="form-control" placeholder="Minimalna cena">
+        </div>
+        <div class="col-md-2">
+            <label for="cenaDo" class="form-label" style="color: #555;">Cena do</label>
+            <input type="number" name="cenaDo" id="cenaDo" class="form-control" placeholder="Maksymalna cena">
+        </div>
+        <div class="col-md-2">
+            <label for="dataOd" class="form-label" style="color: #555;">Data od</label>
+            <input type="date" name="dataOd" id="dataOd" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <label for="dataDo" class="form-label" style="color: #555;">Data do</label>
+            <input type="date" name="dataDo" id="dataDo" class="form-control">
+        </div>
+        <div class="col-md-3">
+            <label for="sortowanie" class="form-label" style="color: #555;">Sortowanie</label>
+            <select name="sortowanie" id="sortowanie" class="form-select">
+                <option value="">Brak</option>
+                <option value="CenaRosnaco">Cena - rosnąco</option>
+                <option value="CenaMalejaco">Cena - malejąco</option>
+            </select>
+        </div>
+        <div class="col-12 text-center mt-3">
+            <button type="submit" class="btn btn-warning" style="color: #004a80; font-weight: bold;">Filtruj</button>
+            <a asp-action="Index" class="btn btn-secondary">Wyczyść filtry</a>
+        </div>
+    </form>
+</div>
+
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4" style="color: #004a80;">Dostępne Oferty</h2>
+    <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="col-12">
+                <div class="alert alert-warning text-center">
+                    Brak ofert spełniających podane kryteria.
+                </div>
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card" style="border: 1px solid #e9ecef; border-radius: 10px; box-shadow: 0px 4px 6px rgba(0,0,0,0.1); overflow: hidden; height: 100%;">
+                        <div class="card-img-top" style="text-align: center; background-color: #f8f9fa;">
+                            @if (!string.IsNullOrEmpty(item.Auto.Zdjecie))
+                            {
+                                <img src="@item.Auto.Zdjecie" alt="Zdjęcie auta" class="img-fluid" style="max-height: 200px; width: auto; object-fit: contain;">
+                            }
+                            else
+                            {
+                                <div class="text-center d-flex align-items-center justify-content-center" style="height: 200px; background-color: #e9ecef; color: #555;">
+                                    Brak zdjęcia
+                                </div>
+                            }
+                        </div>
+                        <div class="card-body" style="padding: 20px; background-color: white;">
+                            <h4 class="card-title" style="color: #004a80; text-align: center;">@item.Auto.Marka @item.Auto.Model</h4>
+                            <p style="color: #555; text-align: center;"><strong>Silnik:</strong> @item.Auto.Silnik</p>
+                            <p style="color: #555; text-align: center;"><strong>Cena:</strong> @item.Auto.Cena zł / dzień</p>
+                            <div style="text-align: center;">
+                                <a asp-action="Details" asp-route-id="@item.OfertaId" asp-route-autoId="@item.Auto.AutoId" asp-route-cena="@item.Auto.Cena"
+                                   class="btn btn-warning" style="color: #004a80; font-weight: bold; margin-top: 10px;">Szczegóły</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
