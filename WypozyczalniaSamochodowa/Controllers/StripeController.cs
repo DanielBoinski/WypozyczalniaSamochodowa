@@ -65,14 +65,14 @@ namespace WypozyczalniaSamochodowa.Controllers
                 }
             },
                     Mode = "payment",
-                    SuccessUrl = Url.Action("Success", "Stripe", new { model.AutoId, model.StartDate, model.EndDate, model.Amount }, Request.Scheme),
+                    SuccessUrl = Url.Action("Success", "Stripe", new { autoId = model.AutoId, startDate = model.StartDate, endDate = model.EndDate, amount = model.Amount }, Request.Scheme),
                     CancelUrl = Url.Action("Cancel", "Stripe", null, Request.Scheme),
                 };
 
                 var service = new SessionService();
                 var session = service.Create(options);
 
-                Console.WriteLine($"Stripe Session: AutoId={model.AutoId}, StartDate={model.StartDate}, EndDate={model.EndDate}, Amount={model.Amount}");
+                Console.WriteLine($"Stripe Session created: {session.Id}, AutoId={model.AutoId}, Amount={model.Amount}");
                 return Json(new { id = session.Id, url = session.Url });
             }
             catch (Exception ex)
@@ -83,10 +83,13 @@ namespace WypozyczalniaSamochodowa.Controllers
         }
 
 
+
         public async Task<IActionResult> Success(int autoId, string startDate, string endDate, int amount)
         {
             try
             {
+                Console.WriteLine($"Stripe Success callback: AutoId={autoId}, StartDate={startDate}, EndDate={endDate}, Amount={amount}");
+
                 if (autoId <= 0 || string.IsNullOrEmpty(startDate) || string.IsNullOrEmpty(endDate) || amount <= 0)
                 {
                     throw new ArgumentException("Brakuje wymaganych danych.");
@@ -98,18 +101,6 @@ namespace WypozyczalniaSamochodowa.Controllers
                     throw new Exception("Nie znaleziono samochodu.");
                 }
 
-               
-                var overlappingRentals = _context.Wynajecie
-                    .Any(w => w.AutoId == autoId &&
-                              ((DateTime.Parse(startDate) >= w.DataRozpoczecia && DateTime.Parse(startDate) < w.DataZakonczenia) ||
-                               (DateTime.Parse(endDate) > w.DataRozpoczecia && DateTime.Parse(endDate) <= w.DataZakonczenia)));
-
-                if (overlappingRentals)
-                {
-                    throw new Exception("Auto jest już wynajęte w tym okresie.");
-                }
-
-                
                 var wynajecie = new Wynajecie
                 {
                     AutoId = autoId,
@@ -120,23 +111,23 @@ namespace WypozyczalniaSamochodowa.Controllers
                     PaymentMethod = "Online"
                 };
 
-                auto.Status = false; 
+                auto.Status = false;
                 _context.Add(wynajecie);
                 _context.Update(auto);
 
                 await _context.SaveChangesAsync();
 
                 ViewBag.Message = "Płatność zakończona sukcesem! Samochód został wynajęty.";
+                return View();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Błąd podczas zapisu danych: {ex.Message}");
-                Console.WriteLine($"AutoId: {autoId}, StartDate: {startDate}, EndDate: {endDate}, Amount: {amount}");
+                Console.WriteLine($"Błąd w Stripe Success: {ex.Message}");
                 return RedirectToAction("Cancel");
             }
-
-            return View();
         }
+
+
 
 
 
