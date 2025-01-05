@@ -185,7 +185,7 @@ namespace WypozyczalniaSamochodowa.Controllers
             }
 
          
-            if (wynajecie.PaymentMethod == "Cash")
+            if (wynajecie.PaymentMethod == "Cash" || wynajecie.PaymentMethod == "Online")
             {
                 _context.Add(wynajecie);
                 auto.Status = false; 
@@ -215,7 +215,10 @@ namespace WypozyczalniaSamochodowa.Controllers
                     Console.WriteLine($"Wystąpił błąd podczas wysyłania e-maila: {ex.Message}");
                 }
 
-                return RedirectToAction(nameof(Index));
+                if (wynajecie.PaymentMethod == "Cash")
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
 
             
